@@ -14,13 +14,12 @@
 
   <!-- bootstrap -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js'></script>
-
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"></script>
   <!-- font awesome -->
   <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 
   <!-- Vue.js script source -->
-  <script src="https://unpkg.com/vue/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
 
   <style>
     .taskDone {
@@ -47,12 +46,12 @@
 <body>
 <div class="container">
   <div id="app" class="col-sm-10 col-sm-offset-1">
-    <br>
+
     <div class="panel panel-success">
       <div class="panel-heading">
         <h3 class="text-center">Admin Panel</h3>
       </div>
-      
+
       <div class="panel-body">
         <div class="col-sm-4">
           <label for="">Display Title</label>
@@ -72,39 +71,36 @@
           <input type="checkbox" v-model="displayProgressBar">
         </div>
         <div class="col-sm-4">
-          <label for="">Change App Title</label>
+          <label>Change App Title</label>
           <input type="text" :value="appTitle" v-on:input="changeAppTitle">
         </div>
       </div>
-    </div>
 
+      </div>
     <br>
-    
-    <h1 v-if="displayTitle">{{ this.appTitle }}</h1>
-    
-    <div class="panel panel-info" v-if="displayAddTasks">
-      <div class="panel-heading">
-        <h3 class="text-center">Add New Task</h3>
-      </div>
-      
-      <div class="panel-body">
-        <form v-on:submit="addTask">
-          <div class="col-sm-8">
-            <input type="text" class="form-control" v-model="tasks.name">
-          </div>
-          
-          <div class="col-sm-4">
-            <input type="submit" class="btn btn-primary btn-block" value="Add">
-          </div>
-        </form>
-      </div>
+    <h1 v-if="displayTitle">{{ appTitle }}</h1>
+
+<div class="panel panel-info" v-if="displayAddTasks">
+  <div class="panel-heading">
+    <h3 class="text-center">Add New Task</h3>
+    <div class="panel-body">
+      <form v-on:submit="addTask">
+        <div class="col-sm-8">
+          <input type="text" class="form-control" v-model="tasks.name">
+        </div>
+        
+        <div class="col-sm-4">
+          <input type="submit" class="btn btn-primary btn-block" value="Add">
+        </div>
+      </form>
     </div>
-    
+  </div>
+</div>
+
     <div class="panel panel-success" v-if="displayProgressBar">
       <div class="panel-heading">
         <h3 class="text-center">Completion Progress Bar</h3>
       </div>
-      
       <div class="panel-body">
         <div class="col-sm-8 col-sm-offset-2">
           <div class="completionProgressGreyBar">
@@ -113,12 +109,12 @@
         </div>
       </div>
     </div>
-    
+
     <div class="panel panel-info" v-if="displayTaskStatistics">
       <div class="panel-heading">
         <h3 class="text-center">Tasks Statistics</h3>
       </div>
-      
+
       <div class="panel-body">
         <div class="col-sm-6">
           <p v-on:mouseover="changeTotalTasks">Total Tasks: {{ tasks.length }}</p>
@@ -128,37 +124,36 @@
         </div>
         <div class="col-sm-6">
           <h3>{{ displayedTasksStatView }}</h3>
-          <h3 style="padding: 10px;" v-bind:class="manageable" class="green">{{ leftToDo < 10 ? 'Manageable' : 'Tasks Overload' }}</h3>
+          <h3 style="padding: 10px;" v-bind:class="manageable">{{ leftToDo < 10 ? 'Manageable' : 'Tasks Overload' }}</h3>
         </div>
       </div>
     </div>
-    
+
     <table class="table" v-if="displayTasks && tasks.length > 0">
       <thead>
         <th>Check Mark Done</th>
         <th>Task Name</th>
         <th>Delete</th>
       </thead>
-      
       <tbody>
         <tr v-for="task in tasks">
           <td><input type="checkbox" v-model="task.done"></td>
-          <td><span :class="{ taskDone: task.done }">{{ task.name }}</span></td>
-          <td><button class="btn btn-danger btn-block" v-on:click="deleteTask(task)">Delete</button></td>
+          <td><span :class="{taskDone: task.done}">{{ task.name }}</span></td>
+          <td><button class="btn btn-danger btn-block" 
+            v-on:click="deleteTask(task)">Delete</button></td>
         </tr>
       </tbody>
     </table>
-    
-    <h3 class="text-center" v-else>The tasks list has been hidden or there are no tasks to display</h3>
-    
+
+    <h3 class="text-center" v-else>The Tasks are being hidden or no Tasks to display</h3>
+
   </div>
 </div>
-
 <script>
-  let todoApp = new Vue({
+  let toDoApp = new Vue({
     el: '#app',
     data: {
-      appTitle: 'Todo Task List App',
+      appTitle: 'To Do task List',
       displayTitle: true,
       displayTasks: true,
       displayProgressBar: false,
@@ -172,20 +167,19 @@
       changeAppTitle: function(event) {
         this.appTitle = event.target.value;
       },
-      addTask: function(event) {
-        event.preventDefault();
-        
-        if (this.tasks.name !== '' && this.tasks.name !== undefined) {
+      addTask: function(event){
+        event.preventDefault(); //prevent page from reloading, because values are saved inside vue instance
 
+        if (this.tasks.name !== '' && this.tasks.name !== undefined){
           this.tasks.push({
             name: this.tasks.name,
-            done: false,
+            done: false
           });
         }
       },
-      deleteTask: function(task) {
+      deleteTask: function(task){
         this.tasks.splice(this.tasks.indexOf(task), 1);
-        this.deletedTasks++;
+        this.deletedTasks ++;
       },
       changeTotalTasks: function() {
         this.displayedTasksStat = 'totalTasks';
@@ -203,7 +197,7 @@
     computed: {
       checkMarkedTasks: function() {
         let count = 0;
-        for (let i = 0; i < this.tasks.length; ++i) {
+        for(let i = 0; i < this.tasks.length; i++) {
           if (this.tasks[i].done == true) {
             count ++;
           }
@@ -239,7 +233,7 @@
         }
       }
     }
-  });
+  })
 </script>
 </body>
 </html>
